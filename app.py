@@ -2,7 +2,7 @@ from flask import Flask
 
 app = Flask(__name__)
 
-from src.routes import *
+from routes.threads import *
 
 
 if __name__ == "__main__":
