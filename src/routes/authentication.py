@@ -45,33 +45,3 @@ def login():
         return json.dumps({'token': token}), 200, {'Content-Type': 'application/json'}
     else:
         return 'Login failed', 401
-    
-@auth_bp.route('/signup_phone', methods=['POST'])
-@cross_origin()
-def signup_phone():
-    data = request.json
-    phone = data.get('phone')
-    password = data.get('password')
-    supabase_api_key = os.environ.get('SUPABASE_KEY')
-
-    response = user_signup_phone(phone, password, supabase_api_key)
-    
-    if response.status_code == 200:
-        return jsonify({'message': 'User signed up successfully!'})
-    else:
-        return jsonify({'message': 'User signup failed.'}), response.status_code
-    
-@auth_bp.route('/login_phone', methods=['POST'])
-@cross_origin()
-def login_phone():
-    data = request.json
-    phone = data.get('phone')
-    password = data.get('password')
-    supabase_api_key = os.environ.get('SUPABASE_KEY')
-
-    response = user_phone_login(phone, password, supabase_api_key)
-    
-    if response.status_code == 200:
-        return jsonify({'message': 'User signed up successfully!'})
-    else:
-        return jsonify({'message': 'User signup failed.'}), response.status_code
