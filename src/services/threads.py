@@ -17,6 +17,9 @@ def get_thread(thread_id):
     thread = supabase.table('blog_posts').select("*").eq('post_id', thread_id).execute().data
     return thread
 
+def update_thread(thread_id, title, content):
+    supabase.table('blog_posts').update({'title': title, 'content': content}).eq('post_id', thread_id).execute()
+
 def delete_thread(thread_id):
     supabase.table('blog_posts').delete().eq('post_id', thread_id).execute()
     return f'Success! Thread {thread_id} has been deleted'

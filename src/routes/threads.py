@@ -20,21 +20,30 @@ def create_thread():
     except:
         return 'Failed. Reason: Invalid data'
 
-@threads_bp.route('/threads', methods=['GET'])
-@cross_origin()
-def threads():
-    threads = get_all_threads()
-    return threads
     
-@threads_bp.route('/threads/<thread_id>', methods=['GET', 'DELETE'])
+@threads_bp.route('/threads/<thread_id>', methods=['GET', 'PUT', 'DELETE'])
 @cross_origin()
 def thread(thread_id):
     if request.method == 'GET':
         thread = get_thread(thread_id)
         return jsonify(thread)
+    elif request.method == 'PUT':
+        data = request.get_json()
+        title = data['title']
+        content = data['content']
+        result = update_thread(thread_id, title, content)
+        supabase.table('blog_posts').update({'title': title, 'content': content}).eq('post_id', thread_id).execute()
+
+        return (f'Success! Thread {thread_id} has been updated')
     elif request.method == 'DELETE':
         result = delete_thread(thread_id)
         return result
+
+@threads_bp.route('/threads', methods=['GET'])
+@cross_origin()
+def threads():
+    threads = get_all_threads()
+    return threads
 
 @threads_bp.route('/add_like/<user>/<post_id>', methods=['GET'])
 @cross_origin()
