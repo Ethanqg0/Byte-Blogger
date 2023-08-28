@@ -1,7 +1,5 @@
-from config.supabase_config import * 
+from src.routes.init_common_route import *
 from src.services.threads import *
-from flask import Flask, current_app, request, Blueprint, jsonify
-from flask_cors import CORS, cross_origin
 from src.services.authentication_services import is_a_user
 
 threads_bp = Blueprint('threads', __name__)
@@ -55,7 +53,6 @@ def remove_like(user, post_id):
     result = remove_post_likes(post_id, user)
     return result
 
-#all threads/comments under a user's profile
 @threads_bp.route('/threads/user/<username>', methods=['GET'])
 @cross_origin()
 def user_threads(username):

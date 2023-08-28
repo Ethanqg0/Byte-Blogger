@@ -1,7 +1,5 @@
-from config.supabase_config import * 
+from src.routes.init_common_route import *
 from src.services.authentication_services import *
-from flask import Flask, current_app, request, Blueprint
-from flask_cors import CORS, cross_origin
 
 auth_bp = Blueprint('auth', __name__)
 
