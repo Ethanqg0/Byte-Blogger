@@ -23,7 +23,7 @@ def create_account():
         status_code = 400
 
     # Create a JSON-formatted response using the json module
-    response = app.response_class(
+    response = auth_bp.response_class(
         response=json.dumps(response_data),
         status=status_code,
         mimetype='application/json'
