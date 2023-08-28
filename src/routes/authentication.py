@@ -3,46 +3,32 @@ from src.services.authentication_services import *
 
 auth_bp = Blueprint('auth', __name__)
 
-@auth_bp.route('/create_account_with_email', methods=['POST'])
+@auth_bp.route('/signup_email', methods=['POST'])
 @cross_origin()
-def create_account():
-    data = request.get_json()  # Get JSON data from the request body
+def signup():
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+    supabase_api_key = os.environ.get('SUPABASE_KEY')
 
-    username = request.json.get('username')
-    email = request.json.get('email')
-    password = request.json.get('password')
-
-    if username and email and password:
-        result = attempt_create_account(username, email, password)
-        response_data = {'message': result}
-        status_code = 200
+    response = user_signup_email(email, password, supabase_api_key)
+    
+    if response.status_code == 200:
+        return jsonify({'message': 'User signed up successfully!'})
     else:
-        response_data = {'message': 'Missing required data'}
-        status_code = 400
+        return jsonify({'message': 'User signup failed.'}), response.status_code
 
-    # Create a JSON-formatted response using the json module
-    response = auth_bp.response_class(
-        response=json.dumps(response_data),
-        status=status_code,
-        mimetype='application/json'
-    )
 
-    return response
-
-@auth_bp.route('/login_with_email', methods=['POST'])
+@auth_bp.route('/login_email', methods=['POST'])
 @cross_origin()
 def login():
-
-    url = os.environ.get('API_URL') + '/auth/v1/token?grant_type=password'
+    url = os.environ.get('SUPABASE_URL') + '/auth/v1/token?grant_type=password'
     headers = {
-    'apikey': os.environ.get('API_KEY'),
+    'apikey': os.environ.get('SUPABASE_KEY'),
     'Content-Type': 'application/json'
     }   
     email = request.json.get('email')
     password = request.json.get('password')
-
-    print(email)
-    print(password)
 
     data = {
         "email": email,
@@ -59,18 +45,33 @@ def login():
         return json.dumps({'token': token}), 200, {'Content-Type': 'application/json'}
     else:
         return 'Login failed', 401
-
-@auth_bp.route('/login_with_github', methods=['GET'])
-@cross_origin()
-def login_with_github():
-    return route_to_github()
-
-@auth_bp.route('/github-callback', methods=['GET'])
-def github_callback():
-    return route_from_github_callback()
     
-@auth_bp.route('/accounts', methods=['GET'])
+@auth_bp.route('/signup_phone', methods=['POST'])
 @cross_origin()
-def accounts():
-    accounts = get_all_accounts()
-    return accounts
+def signup_phone():
+    data = request.json
+    phone = data.get('phone')
+    password = data.get('password')
+    supabase_api_key = os.environ.get('SUPABASE_KEY')
+
+    response = user_signup_phone(phone, password, supabase_api_key)
+    
+    if response.status_code == 200:
+        return jsonify({'message': 'User signed up successfully!'})
+    else:
+        return jsonify({'message': 'User signup failed.'}), response.status_code
+    
+@auth_bp.route('/login_phone', methods=['POST'])
+@cross_origin()
+def login_phone():
+    data = request.json
+    phone = data.get('phone')
+    password = data.get('password')
+    supabase_api_key = os.environ.get('SUPABASE_KEY')
+
+    response = user_phone_login(phone, password, supabase_api_key)
+    
+    if response.status_code == 200:
+        return jsonify({'message': 'User signed up successfully!'})
+    else:
+        return jsonify({'message': 'User signup failed.'}), response.status_code
