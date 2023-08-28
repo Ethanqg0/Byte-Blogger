@@ -3,7 +3,6 @@ import requests
 from config.supabase_config import *
 from flask import redirect, request
 
-
 def attempt_create_account(username, email, password):
     try:
         uuid = user_signup_with_email(email, password)
