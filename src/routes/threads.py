@@ -20,7 +20,6 @@ def create_thread():
     except:
         return 'Failed. Reason: Invalid data'
 
-    
 @threads_bp.route('/threads/<thread_id>', methods=['GET', 'PUT', 'DELETE'])
 @cross_origin()
 def thread(thread_id):
@@ -33,7 +32,6 @@ def thread(thread_id):
         content = data['content']
         result = update_thread(thread_id, title, content)
         supabase.table('blog_posts').update({'title': title, 'content': content}).eq('post_id', thread_id).execute()
-
         return (f'Success! Thread {thread_id} has been updated')
     elif request.method == 'DELETE':
         result = delete_thread(thread_id)
@@ -50,3 +48,16 @@ def threads():
 def add_like(user, post_id):
     result = update_post_likes(post_id, user)
     return result
+
+@threads_bp.route('/remove_like/<user>/<post_id>', methods=['GET'])
+@cross_origin()
+def remove_like(user, post_id):
+    result = remove_post_likes(post_id, user)
+    return result
+
+#all threads/comments under a user's profile
+@threads_bp.route('/threads/user/<username>', methods=['GET'])
+@cross_origin()
+def user_threads(username):
+    threads = supabase.table('blog_posts').select("*").eq('username', username).execute().data
+    return jsonify([thread for thread in threads if thread['parent_comment_id'] is None])
