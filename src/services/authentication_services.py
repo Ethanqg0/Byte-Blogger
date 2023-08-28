@@ -1,6 +1,7 @@
 import json
 import requests
 from config.supabase_config import *
+from flask import redirect, request
 
 
 def attempt_create_account(username, email, password):
@@ -121,3 +122,10 @@ def find_uuid_by_email(email):
             uuid = account['uuid']
         return uuid
     return None
+
+def route_to_github():
+    github_auth_url = f'https://github.com/login/oauth/authorize?client_id=207218418f7984fd3f39&redirect_uri=http://127.0.0.1:5000/github-callback'
+    return redirect(github_auth_url)
+
+def route_from_github_callback():
+    code = request.args.get('code')

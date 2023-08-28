@@ -1,40 +1,35 @@
 from config.supabase_config import * 
-from services.comments import *
-from flask import Flask, current_app, request
+from src.services.comments import *
+from flask import Flask, current_app, request, Blueprint
 from flask_cors import CORS, cross_origin
 
-app = Flask(__name__)
-CORS(app)
+threads_bp = Blueprint('threads', __name__)
 
-# Access app configurations directly
-app_name = app.name
-debug_mode = app.debug
-
-@app.route('/', methods=['GET'])
+@threads_bp.route('/', methods=['GET'])
 @cross_origin()
 def index():
     return "Hello World! Test 2"
 
-@app.route('/threads', methods=['GET'])
+@threads_bp.route('/threads', methods=['GET'])
 @cross_origin()
 def threads():
     threads = supabase.table('blog_posts').select("*").execute().data
     return [thread for thread in threads if thread['parent_comment_id'] == None]
 
-@app.route('/comments/<thread_id>', methods=['GET'])
+@threads_bp.route('/comments/<thread_id>', methods=['GET'])
 @cross_origin()
 def comments(thread_id):
     threads = supabase.table('blog_posts').select("*").execute().data
     return [thread for thread in threads if thread['parent_comment_id'] == thread_id]
 
-@app.route('/threads', methods=['POST'])
+@threads_bp.route('/threads', methods=['POST'])
 @cross_origin()
 def create_thread():
     data = request.get_json()
     supabase.table('blog_posts').insert([data]).execute()
     return 'OK'
 
-@app.route('/update_comments_count', methods=['POST'])
+@threads_bp.route('/update_comments_count', methods=['POST'])
 @cross_origin()
 def update_comments_count():
     data = request.get_json()
