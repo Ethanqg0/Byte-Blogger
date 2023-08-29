@@ -1,5 +1,10 @@
-# Byte-Blogger
+# Blogging API
 
-# Folder Structure: This folder structure has been meticulously crafted to facilitate efficient backend development. By adhering to the Model-View-Controller (MVC) pattern, I've strategically organized components into separate directories: models to define data structures, controllers to manage business logic, routes to handle API endpoints, and services to encapsulate specialized functionality. This architecture was chosen to enhance code readability, encourage modular design, and enable seamless integration of additional frontend components when required in the future.
+# Folder Organization: 
+    Src-config-tests architecture to modularize the program. 
+    Src consists of models-views-controllers-services
+    Blueprints to modularize app instances
 
-#Blueprints: Utilizes blueprints to modularize our application into smaller sections. E.g. authentication, routes, services, etc
+#Increased Performance: Posts may contain lots of data. 
+    To maximize their performance, we will introduce pagination to modularize our data. 
+    Then, we will cache data to create keys for frequently access data and minimize our fetching. 

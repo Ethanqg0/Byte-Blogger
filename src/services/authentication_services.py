@@ -37,8 +37,6 @@ def user_login_email(email, password, api_key):
     else:
         return None
     
-
-
 def is_a_user(username):
     usernames = supabase.table('username_mapping').select("username").execute().model_dump_json()
     usernames = json.loads(usernames)['data']
