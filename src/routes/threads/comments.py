@@ -1,5 +1,5 @@
 from src.routes.init_common_route import *
-from services.posts_services import *
+from src.services.posts_services import *
 from src.services.authentication_services import is_a_user
 
 comments_bp = Blueprint('comments', __name__)
