@@ -3,13 +3,26 @@ from src.services.posts_services import *
 
 comments_bp = Blueprint('comments', __name__)
 
-@comments_bp.route('/posts/<post_id>/create_comment', methods=['POST'])
+@comments_bp.route('/posts/<int:post_id>/create_comment', methods=['POST'])
 def create_comment(post_id):
     thread = get_post(post_id)
-    data = request.get_json()
-    user = data['user']
-    content = data['content']
+    if thread is None:
+        return jsonify({'error': 'Post not found'}), 404
     try:
-        supabase.table('blog_posts').insert( {"content": content, "username": user, "parent_comment_id": post_id} ).execute()
-    except:
-        return 'Failed. Reason: Invalid data'
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+        
+        user = data.get('user')
+        content = data.get('content')
+        if not user or not content:
+            return jsonify({'error': 'User and content are required'}), 400
+        
+        result = supabase.table('comments').insert({"content": content, "username": user, "parent_post_id": post_id}).execute()
+        if result['status'] == 'error':
+            return jsonify({'error': 'Failed to create comment'}), 500
+        
+        return jsonify({'message': 'Comment has been created'})
+
+    except Exception as e:
+        return jsonify({'error': 'Failed. Reason: Invalid data'}), 400
