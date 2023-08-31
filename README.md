@@ -1,5 +1,10 @@
 # Blogging API
 
+# Concerns
+    #1: Is the API currently stateless? 
+    #2: gitignore currently does not work
+    #3: Performance? Wanted to add caching but was not sure because the data keeps being updated from new threads.
+
 # DOCUMENTATION
     # not done yet
 
