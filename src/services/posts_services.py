@@ -2,27 +2,27 @@ from config.supabase_config import *
 from src.services.authentication_services import *
 from flask import jsonify
 
-def create_thread(user, title, content):
+def create_post(user, title, content):
     if not is_a_user(user):
         return f'Failed. Reason: {user} is not a valid user'
 
     supabase.table('blog_posts').insert( {"title": title, "content": content, "username": user} ).execute()
-    return f'Success! Thread {title} has been created'
+    return f'Success! Post {title} has been created'
 
-def get_all_threads():
-    threads = supabase.table('blog_posts').select("*").execute().data
-    return jsonify([thread for thread in threads if thread['parent_comment_id'] is None])
+def get_all_posts():
+    posts = supabase.table('blog_posts').select("*").execute().data
+    return jsonify([post for post in posts if post['parent_comment_id'] is None])
 
-def get_thread(thread_id):
-    thread = supabase.table('blog_posts').select("*").eq('post_id', thread_id).execute().data
-    return thread
+def get_post(post_id):
+    post = supabase.table('blog_posts').select("*").eq('post_id', post_id).execute().data
+    return post
 
-def update_thread(thread_id, title, content):
-    supabase.table('blog_posts').update({'title': title, 'content': content}).eq('post_id', thread_id).execute()
+def update_post(post_id, title, content):
+    supabase.table('blog_posts').update({'title': title, 'content': content}).eq('post_id', post_id).execute()
 
-def delete_thread(thread_id):
-    supabase.table('blog_posts').delete().eq('post_id', thread_id).execute()
-    return f'Success! Thread {thread_id} has been deleted'
+def delete_post(post_id):
+    supabase.table('blog_posts').delete().eq('post_id', post_id).execute()
+    return f'Success! Post {post_id} has been deleted'
 
 def update_post_likes(post_id, user):
     likes = supabase.table('blog_posts').select("*").eq('post_id', post_id).execute().data[0]['likes']

@@ -4,7 +4,6 @@ from src.services.authentication_services import *
 auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/signup_email', methods=['POST'])
-@cross_origin()
 def signup():
     data = request.json
     email = data.get('email')
@@ -20,7 +19,6 @@ def signup():
 
 
 @auth_bp.route('/login_email', methods=['POST'])
-@cross_origin()
 def login():
     url = os.environ.get('SUPABASE_URL') + '/auth/v1/token?grant_type=password'
     headers = {
