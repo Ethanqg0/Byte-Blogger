@@ -3,7 +3,7 @@ from src.services.posts_services import get_post
 
 comments_bp = Blueprint('comments', __name__)
 
-@comments_bp.route('/posts/<int:post_id>/create_comment', methods=['POST'])
+@comments_bp.route('/posts/<int:post_id>/create-comment', methods=['POST'])
 def create_comment(post_id):
     thread = get_post(post_id)
     if thread is None:

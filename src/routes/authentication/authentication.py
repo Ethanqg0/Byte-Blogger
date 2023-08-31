@@ -3,7 +3,7 @@ from src.services.authentication_services import *
 
 auth_bp = Blueprint('auth', __name__)
 
-@auth_bp.route('/signup_email', methods=['POST'])
+@auth_bp.route('/signup-email', methods=['POST'])
 def signup():
     data = request.json
     email = data.get('email')
@@ -18,7 +18,7 @@ def signup():
         return jsonify({'message': 'User signup failed.'}), response.status_code
 
 
-@auth_bp.route('/login_email', methods=['POST'])
+@auth_bp.route('/login-email', methods=['POST'])
 def login():
     url = os.environ.get('SUPABASE_URL') + '/auth/v1/token?grant_type=password'
     headers = {
