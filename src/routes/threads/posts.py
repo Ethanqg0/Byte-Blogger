@@ -1,11 +1,11 @@
-from src.routes.init_common_route import *
-from src.services.posts_services import *
+from src.routes.init_common_route import * #supabase and flask confg
+from src.services.posts_services import get_all_posts, get_post, get_post_by_user, update_post, delete_post, update_post_likes, remove_post_likes, is_a_user
 
 posts_bp = Blueprint('posts', __name__)
 
 @posts_bp.route('/posts', methods=['GET'])
 def posts():
-    posts = supabase.table('blog_posts').select("*").execute().data
+    posts = get_all_posts()
     return posts
 
 @posts_bp.route('/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -36,43 +36,37 @@ def post(post_id):
             return jsonify({'error': 'Failed to delete post'}), 500
         return jsonify({'message': 'Post deleted successfully'})
 
-
 @posts_bp.route('/posts/user/<username>', methods=['GET'])
 def user_posts(username):
-    threads = supabase.table('blog_posts').select("*").eq('username', username).execute().data
-    return jsonify([thread for thread in threads if thread['parent_comment_id'] is None])
+    posts = get_post_by_user(username)
+    return posts
 
-def create_post():
-    try:
-        data = request.get_json()
-        if not data:
-            return jsonify({'error': 'No data provided'}), 400
-
-        user = data.get('user')
-        title = data.get('title')
-        content = data.get('content')
-
-        if not user or not title or not content:
-            return jsonify({'error': 'User, title, and content are required'}), 400
-        
-        # Assuming you have a valid supabase instance
-        result = supabase.table('blog_posts').insert({"title": title, "content": content, "username": user}).execute()
-        
-        if result['status'] == 'error':
-            return jsonify({'error': 'Failed to create post'}), 500
-        
-        return jsonify({'message': 'Success. Post has been created'})
-
-    except Exception as e:
-        return jsonify({'error': 'Failed. Reason: Invalid data'}), 400
-
+@posts_bp.route('/posts/<int:post_id>/like/<user>', methods=['POST', 'DELETE'])
+def like_post(post_id, user):
+    if request.method == 'POST':
+        update_post_likes(post_id, user)
+        return jsonify({'message': 'Like added'}), 200
+    elif request.method == 'DELETE':
+        remove_post_likes(post_id, user)
+        return jsonify({'message': 'Like removed'}), 200
+    else:
+        return jsonify({'error': 'Invalid request'}), 400
     
-@posts_bp.route('/add_like/<user>/<post_id>', methods=['GET'])
-def add_like(user, post_id):
-    result = update_post_likes(post_id, user)
-    return result
 
-@posts_bp.route('/remove_like/<user>/<post_id>', methods=['GET'])
-def remove_like(user, post_id):
-    result = remove_post_likes(post_id, user)
-    return result
+""" # FIX ME
+@posts_bp.route('/posts/create_post', methods=['POST'])
+def create_post_route():
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
+    user = data.get('user')
+    title = data.get('title')
+    content = data.get('content')
+
+    if not is_a_user(user):
+        return False, f'Failed. Reason: {user} is not a valid user'
+    
+    result = supabase.table('blog_posts').insert({"title": title, "content": content, "username": user}).execute()
+    return 'success'
+"""

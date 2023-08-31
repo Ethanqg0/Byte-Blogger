@@ -27,3 +27,6 @@
     Not done
 
     Introduced versioning in API routes with version numbers to ensure that future upgraded versions in dependencies will not conflict with API
+
+# Attaching indexes
+    Attaching indexes to the database to increase queries

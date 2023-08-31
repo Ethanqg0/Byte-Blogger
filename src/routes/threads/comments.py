@@ -1,5 +1,5 @@
-from src.routes.init_common_route import *
-from src.services.posts_services import *
+from src.routes.init_common_route import * #supabase and flask config
+from src.services.posts_services import get_post
 
 comments_bp = Blueprint('comments', __name__)
 

@@ -2,13 +2,6 @@ from config.supabase_config import *
 from src.services.authentication_services import *
 from flask import jsonify
 
-def create_post(user, title, content):
-    if not is_a_user(user):
-        return f'Failed. Reason: {user} is not a valid user'
-
-    supabase.table('blog_posts').insert( {"title": title, "content": content, "username": user} ).execute()
-    return f'Success! Post {title} has been created'
-
 def get_all_posts():
     posts = supabase.table('blog_posts').select("*").execute().data
     return jsonify([post for post in posts if post['parent_comment_id'] is None])
@@ -16,6 +9,30 @@ def get_all_posts():
 def get_post(post_id):
     post = supabase.table('blog_posts').select("*").eq('post_id', post_id).execute().data
     return post
+
+def get_post_by_user(username):
+    threads = supabase.table('blog_posts').select("*").eq('username', username).execute().data
+    return jsonify([thread for thread in threads if thread['parent_comment_id'] is None])
+
+"""
+                                    I broken
+def create_post(user, title, content):
+    if not is_a_user(user):
+        return False, f'Failed. Reason: {user} is not a valid user'
+
+    # Get the last index from the blog_posts table
+    last_index = supabase.table('blog_posts').select('index', order_by='index.desc', limit=1).execute().data[0]['index']
+    
+    new_index = int(last_index + 1)
+    
+    result = supabase.table('blog_posts').insert({"title": title, "content": content, "username": user}).execute()
+
+    if result['status'] == 'error':
+        return False, 'Failed to create post'  
+
+    return True, f'Success! Post {title} has been created'
+"""
+
 
 def update_post(post_id, title, content):
     supabase.table('blog_posts').update({'title': title, 'content': content}).eq('post_id', post_id).execute()
@@ -53,4 +70,3 @@ def remove_post_likes(post_id, user):
         return f'Failed. Reason: {user} has not liked this post'
 
     return f'Success! {user} has unliked post {post_id}. The likes have decreased from {likes} to {likes - 1}'
-
