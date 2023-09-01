@@ -4,6 +4,7 @@ from src.routes.threads.comments import *
 from src.routes.authentication.authentication import *
 from config.supabase_config import * 
 
+hello
 app = Flask(__name__)
 CORS(app)
 
