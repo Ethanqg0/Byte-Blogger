@@ -1,32 +1,86 @@
-# Blogging API
+# ByteBlogger API Documentation
 
-# Concerns
-    #1: Any recommendations to increase performance?
-    #2: Any redundancy
-    #3: Any other tips
+# Endpoints
+API Endpoints
 
-# DOCUMENTATION
-    # not done yet
+Here are the available API endpoints you can interact with:
 
-# Folder Organization: 
-    Microservices architecture. The authentication, services, and data modificaiton are loosely coupled and heavily modularized. 
-    Blueprints to modularize app instances
+    User Signup
 
-# Consisten Data Format: JSON/ JWT
-    Only uses JSON formatting and JSON web tokens in responses
-    Extremely simple, also assisted with the help of Supabase
+    Endpoint: http://localhost:3000/signup-email
+    Method: POST
+    Description: Register a new user with an email and password.
+    Parameters: JSON payload with email and password.
+    User Login
 
-# Increased Performance: Caching
-    Introduced Caching use MemCache in Flask
-    Utilized manual testing files with 100 compared rates
-    Utilized automated testing from Postman
-    Significant increase in performance from caching. First response time compared to the average of the other 99 improved by 40%
-    Uses memoization, a programming topic that is now being applied to real applications
+    Endpoint: http://localhost:3000/login-email
+    Method: POST
+    Description: Authenticate a user using their email and password.
+    Parameters: JSON payload with email and password.
+    Get All Posts
 
-# Long-term outlook: Versioning
-    Not done
+    Endpoint: http://localhost:3000/posts
+    Method: GET
+    Description: Retrieve all blog posts.
+    Get Post by ID, Update, and Delete
 
-    Introduced versioning in API routes with version numbers to ensure that future upgraded versions in dependencies will not conflict with API
+    Endpoint: http://localhost:3000/posts/<post_id>
+    Methods: GET, PUT, DELETE
+    Description:
+    GET: Retrieve a blog post by its ID.
+    PUT: Update a blog post by its ID.
+    DELETE: Delete a blog post by its ID.
+    Get Posts by User
 
-# Attaching indexes
-    Attaching indexes to the database to increase queries
+    Endpoint: http://localhost:3000/posts/user/<username>
+    Method: GET
+    Description: Retrieve blog posts by a specific user.
+    Like/Unlike a Post
+
+    Endpoint: http://localhost:3000/posts/<post_id>/like/<user>
+    Methods: POST, DELETE
+    Description:
+    POST: Add a like to a blog post.
+    DELETE: Remove a like from a blog post.
+    Create a Comment
+
+    Endpoint: http://localhost:8080/posts/<post_id>/create-comment
+    Method: POST
+    Description: Create a comment for a specific blog post.
+    Parameters: JSON payload with user and content.
+
+# Docker
+The ByteBlogger API is containerized and available on DockerHub for easy deployment.
+
+### DockerHub Repository
+
+You can find the containerized application on DockerHub via the following link: [ByteBlogger DockerHub Repository](https://hub.docker.com/repository/docker/ethanqg/flask-byteblogger/general)
+
+### Running the Container
+
+Frontend developers can run the API as a container and make HTTP requests to access API data. Follow these steps to get started:
+
+1. **Pull the Docker Image**: Pull the Docker image from the DockerHub repository using the following command:
+
+   ```bash
+   docker pull ethanqg/flask-byteblogger:v1.0
+
+2. Run the container:
+    docker run -p 8080:80 ethanqg/flask-byteblogger:v1.0
+
+3. Make HTTP requests:
+    fetch('{{ insert endpoint here }}')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Handle the data returned by the API
+    console.log(data);
+  })
+  .catch(error => {
+    // Handle errors, e.g., network issues or API errors
+    console.error('There was a problem with the fetch operation:', error);
+  });
