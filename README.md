@@ -63,7 +63,7 @@ Frontend developers can run the API as a container and make HTTP requests to acc
 1. **Pull the Docker Image**: Pull the Docker image from the DockerHub repository using the following command:
 
    ```bash
-   docker pull ethanqg/flask-byteblogger:v1.0
+   docker pull ethanqg/flask-byteblogger-2:v1.2
 
 2. Run the container:
     docker container run -p 8080:8080 ethanqg/flask-byteblogger-2:v1.2
