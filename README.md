@@ -1,5 +1,8 @@
 # ByteBlogger API Documentation
 
+# Introduction
+Welcome to the Byteblogger API documentation! Byteblogger is a simplistic API designed for bloggers and content creators in the technology niche. With Byteblogger, you can programmatically interact with social media platforms and create, manage, and share technology-related content effortlessly.
+
 # Endpoints
 API Endpoints
 
