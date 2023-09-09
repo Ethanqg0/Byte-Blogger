@@ -66,7 +66,7 @@ Frontend developers can run the API as a container and make HTTP requests to acc
    docker pull ethanqg/flask-byteblogger:v1.0
 
 2. Run the container:
-    docker run -p 8080:80 ethanqg/flask-byteblogger:v1.0
+    docker run -p 5000:5000 ethanqg/flask-byteblogger:v1.0
 
 3. Make HTTP requests:
     fetch('{{ insert endpoint here }}')
